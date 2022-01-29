@@ -64,6 +64,13 @@ exports.logIn = catchAsync( async (req,res,next) => {
 
 }) 
 
+exports.logOut = catchAsync( async (req,res,next) => {
+    res.cookie('jwt', '', {
+        maxAge: 1,
+    })
+    res.status(200).json({success: true, message: 'logged out successfully'})
+}) 
+
 
 
 exports.protect = catchAsync(async (req,res,next) =>{ 
@@ -79,7 +86,6 @@ exports.protect = catchAsync(async (req,res,next) =>{
 
     //Verify token
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
-    console.log(decoded)
 
     //Check if user exists 
     const currentUser = await User.findById(decoded.id)
@@ -187,7 +193,7 @@ exports.updatePassword = catchAsync( async (req,res,next) => {
 
     //Check if the current password is correct
     if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
-        return next(new AppError('Your curren password is wrong', 401))
+        return next(new AppError('Your current password is wrong', 401))
     }
 
     //Update to desired

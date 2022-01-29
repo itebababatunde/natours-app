@@ -2,6 +2,8 @@ const catchAsync = require('./../utils/catchAsync')
 const User = require('./../models/userModel');
 const AppError = require('./../utils/appError')
 const factory = require('./handlerFactory')
+const {upload} = require('../utils/upload')
+
 
 
 
@@ -12,6 +14,8 @@ const filterObj = (obj, ...allowedFields) => {
      })
      return newObj
 }
+
+exports.uploadProfilePic = upload.single('photo')
 
 exports.getAllUsers =  factory.getAll(User)
   
@@ -38,15 +42,22 @@ exports.getMe = (req,res,next) => {
 exports.updateMe = catchAsync( async (req,res,next)=>{
     //Create error if user posts password data
     if(req.body.password||req.body.passwordConfirm){
-        return next(new AppError('This route is not for passwprd updates', 400))
+        return next(new AppError('This route is not for password updates', 400))
     }
 
     //Filter body to only update certain fields
-    const filteredBody = filterObj(req.body, 'name', 'email')
+    const {name, email} = req.body
 
+    updateObj = {
+        name,
+        email
+    }
+    if (req.file){
+        updateObj.photo= req.file.path
+    }
     //Udate user document
 
-    const UpdatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody,{new:true, runValidators:true})
+    const UpdatedUser = await User.findByIdAndUpdate(req.user.id, updateObj,{new:true, runValidators:true})
 
     res.status(200).json({
         status:'success',

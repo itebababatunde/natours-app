@@ -10,13 +10,16 @@ router.post('/signup', authController.signUp )
 router.post('/login', authController.logIn )
 router.post('/forgotPassword', authController.forgotPasword )
 router.patch('/resetPassword/:token', authController.resetPassword)
+router.get('/log-out', authController.logOut)
+
 
 //Protect all upcoming routes
 router.use(authController.protect)
 
 router.patch('/updateMyPassword', authController.protect, authController.updatePassword)
-router.patch('/updateMe', userController.updateMe)
+router.patch('/updateMe', userController.uploadProfilePic,  userController.updateMe)
 router.delete('/deleteMe', userController.deleteMe)
+
 
 router.get('/me', userController.getMe, userController.getUser)
 

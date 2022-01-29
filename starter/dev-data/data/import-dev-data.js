@@ -11,7 +11,7 @@ dotenv.config({ path: './config.env' });
 port = 3000;
 
 
-mongoose.connect('mongodb://localhost:27017/natours', {
+mongoose.connect('mongodb+srv://ite:ite@cluster0.0xiwl.mongodb.net/natours?retryWrites=true', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
