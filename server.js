@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 dotenv.config({ path: './config.env' });
 const app = require('./app.js');
-port = 3000;
+port = process.env.PORT || 3000;
 
 process.on('uncaughtException', err=>{
   console.log('uncaught exceptions, shutting down')
