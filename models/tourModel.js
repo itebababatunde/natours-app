@@ -153,7 +153,6 @@ const tourSchema = new mongoose.Schema({
 
 // Document middlewear : Runs after save and create command
 // tourSchema.post('save', function(next,doc){
-//     console.log(doc)
 //   next()  
 // })
 

@@ -8,7 +8,7 @@ const helmet = require('helmet')
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const hpp = require('hpp')
-
+const compression = require('compression')
 const app = express();
 
 app.set('view engine', 'pug')
@@ -36,6 +36,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+app.use(compression())
 
 //To limit the number od requests to the API from an IP
 const limiter = rateLimit({

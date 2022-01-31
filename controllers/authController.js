@@ -3,7 +3,7 @@ const catchAsync = require('./../utils/catchAsync')
 const jwt = require('jsonwebtoken')
 const AppError = require('./../utils/appError')
 const {promisify} = require('util')
-const sendEmail = require('./../utils/email')
+const Email = require('./../utils/email')
 const crypto = require('crypto')
 
 const signToken = id =>{
@@ -39,6 +39,8 @@ exports.signUp = catchAsync(async (req,res,next)=>{
         password: req.body.password,
         passwordConfirm: req.body.passwordConfirm
     })
+    const url = `${req.protocol}://${req.get('host')}/api/v1/users/me`
+    await new Email(newUser, url).sendWelcome()
 
     createSendToken(newUser, 201, res)
 }) 
@@ -120,7 +122,6 @@ exports.forgotPasword =catchAsync( async (req,res,next) => {
     if(!user){
         return next(new AppError('There is no user with this email', 404))
     }
-    console.log('got here')
 
 
 
@@ -130,14 +131,15 @@ exports.forgotPasword =catchAsync( async (req,res,next) => {
 
     //send as an email
     const resetURL = `${req.protocol}/${req.get('host')}/api/v1/users/resetPassword/${resetToken}`
-    const message = `Frogot your password? click ${resetURL} to reset \n Ignore if you didn't forget your password`
     
     try{
-        await  sendEmail({
-            email: user.email,
-            subject: 'Password request token - valid for 10mins',
-            message
-        })
+        await new Email (user, resetURL).sendPasswordReset()
+
+        // await  sendEmail({
+        //     email: user.email,
+        //     subject: 'Password request token - valid for 10mins',
+        //     message
+        // })
     
         res.status(200).json({
             status: 'success',
