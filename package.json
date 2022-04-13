@@ -7,13 +7,16 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "debug": "ndb server.js",
-    "start:prod": "NODE_ENV=production nodemon server.js"
+    "start:prod": "NODE_ENV=production nodemon server.js",
+    "test": "mocha tests --timeout 25000 --recursive --exit"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
     "cloudinary": "^1.28.1",
     "compression": "^1.7.4",
     "dotenv": "^10.0.0",
@@ -26,7 +29,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-mongo-sanitize": "^2.1.0",
     "express-rate-limit": "^5.2.6",
     "helmet": "^4.6.0",
@@ -34,13 +37,15 @@
     "html-to-text": "^8.1.0",
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.12.13",
+    "mocha": "^9.2.2",
+    "mongoose": "^5.13.14",
     "morgan": "^1.10.0",
     "multer": "^1.4.4",
     "multer-storage-cloudinary": "^4.0.0",
-    "nodemailer": "^6.6.2",
+    "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
     "npm": "^6.14.16",
+    "nyc": "^15.1.0",
     "prettier": "^2.3.1",
     "pug": "^3.0.2",
     "slugify": "^1.5.3",
@@ -50,5 +55,8 @@
   },
   "engines": {
     "node": ">=10.0.0"
+  },
+  "devDependencies": {
+    "supertest": "^6.2.2"
   }
 }

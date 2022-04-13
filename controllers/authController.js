@@ -40,7 +40,7 @@ exports.signUp = catchAsync(async (req,res,next)=>{
         passwordConfirm: req.body.passwordConfirm
     })
     const url = `${req.protocol}://${req.get('host')}/api/v1/users/me`
-    await new Email(newUser, url).sendWelcome()
+    //await new Email(newUser, url).sendWelcome()
 
     createSendToken(newUser, 201, res)
 }) 

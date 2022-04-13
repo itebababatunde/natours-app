@@ -14,8 +14,10 @@ module.exports = class Email{
     newTransport(){
 
         if(process.env.NODE_ENV === 'production'){
+            
             return nodemailer.createTransport({
                 service: 'Sendgrid',
+                secure: true,
                 auth:{
                     user: process.env.SENDGRID_USERNAME, 
                     pass: process.env.SENDGRID_PASSWORD
@@ -34,7 +36,6 @@ module.exports = class Email{
         })
 
     }
-
     async send(template, subject){
         const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
             firstName: this.firstName,
@@ -49,41 +50,26 @@ module.exports = class Email{
             html,
             text: htmlToText.fromString(html)
         }
-
-        await this.newTransport().sendMail(mailOptions)
+        try {
+            await this.newTransport().sendMail(mailOptions)    
+        } catch (error) {
+            console.log(error)
+        }
+        
     }
-
     async sendWelcome(){
+
         await this.send('welcome', 'Welcome to Natours')
+        
     }
 
 
     async sendPasswordReset(){
         await this.send('passwordReset', 'Your password reset token - valid for 10 minutes')
+        if(error){
+            return error
+        }
     }
 
 
 }
-const sendEmail = async  options => {
-    //Create a transporter
-    // const transporter = nodemailer.createTransport({
-    //     host: process.env.EMAIL_HOST,
-    //     port: process.env.EMAIL_PORT,
-
-    //     auth:{
-    //         user: process.env.EMAIL_USERNAME, 
-    //         pass: process.env.EMAIL_PASSWORD
-    //     }
-    // })
-    //Define e-mail options
-    // const mailOptions = {
-    //     from: 'Ite Babatuntunde <iteoluwababatunde@gmail.com>',
-    //     to: options.email,
-    //     subject: options.subject,
-    //     text: options.message
-    // }
-
-    //Send e-mail
-    await transporter.sendMail(mailOptions)
-}
-
